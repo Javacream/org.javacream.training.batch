@@ -1,4 +1,4 @@
-package org.javacream.training.spring.batch;
+package org.javacream.training.batch.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
