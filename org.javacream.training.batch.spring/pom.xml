@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.javacream</groupId>
-	<artifactId>org.javacream.training.spring.batch2</artifactId>
+	<artifactId>org.javacream.training.batch.spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>org.javacream.training.spring.batch2</name>
-	<description>Demo project for Spring Boot</description>
+	<name>org.javacream.training.batch.spring></name>
+	<description>Demo project for Java Batch / Spring Batch</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
