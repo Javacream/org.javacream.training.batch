@@ -2,6 +2,7 @@ package org.javacream.training.batch.spring.business.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class BusinessConfig {
@@ -9,7 +10,7 @@ public class BusinessConfig {
 	@Bean public DataAccessSimulator dataAccessSimulator() {
 		return new DataAccessSimulator();
 	}
-	@Bean public Business2 business2() {
+	@Bean @Scope("prototype") public Business2 business2() {
 		Business2 b2 = new Business2();
 		b2.setSimulator(dataAccessSimulator());
 		return b2;
