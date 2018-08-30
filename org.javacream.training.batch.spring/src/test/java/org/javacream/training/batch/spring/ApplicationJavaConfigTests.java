@@ -3,6 +3,7 @@ package org.javacream.training.batch.spring;
 import javax.annotation.Resource;
 
 import org.javacream.training.batch.spring.business.config.Business1;
+import org.javacream.training.batch.spring.business.config.Business2;
 import org.javacream.training.batch.spring.business.config.BusinessConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,8 @@ public class ApplicationJavaConfigTests {
 
 	@Resource(name = "business1")
 	private Business1 business;
+	@Resource(name = "business2")
+	private Business2 business2;
 
 	@Test
 	public void testBusiness1Spring() {

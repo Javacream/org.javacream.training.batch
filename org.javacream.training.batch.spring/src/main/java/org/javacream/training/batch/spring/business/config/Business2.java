@@ -1,5 +1,7 @@
 package org.javacream.training.batch.spring.business.config;
 
+import javax.annotation.PostConstruct;
+
 public class Business2 {
 
 	
@@ -9,8 +11,8 @@ public class Business2 {
 		this.simulator = simulator;
 	}
 
-	public void init() {
-		System.out.println("Initializing " + this);
+	@PostConstruct public void init() {
+		System.out.println("PostConstruct " + this + ", simulator=" + simulator);
 	}
 	
 	public void doSomething() {

@@ -1,5 +1,7 @@
 package org.javacream.training.batch.spring.business.config;
 
+import javax.annotation.PostConstruct;
+
 public class Business1 {
 
 	private DataAccessSimulator simulator;
@@ -8,7 +10,7 @@ public class Business1 {
 		this.simulator = simulator;
 	}
 
-	public void init() {
+	@PostConstruct public void init() {
 		System.out.println("PostConstruct " + this + ", simulator=" + simulator);
 	}
 
