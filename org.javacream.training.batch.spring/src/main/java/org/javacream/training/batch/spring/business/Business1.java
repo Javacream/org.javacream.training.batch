@@ -3,6 +3,7 @@ package org.javacream.training.batch.spring.business;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,12 @@ public class Business1 {
 		System.out.println("PostConstruct " + this + ", simulator=" + simulator);
 	}
 	
+	@Value("${javacream.external}")
+	private String externalConfig;
+	
+	
 	{
-		System.out.println("Initializing " + this + ", simulator=" + simulator);
+		System.out.println("Initializing " + this + ", simulator=" + simulator + ", extrnalConfig=" + externalConfig);
 	}
 	
 	
