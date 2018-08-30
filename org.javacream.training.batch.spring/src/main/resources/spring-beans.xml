@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean
+		class="org.javacream.training.batch.spring.business.xml.Business1"
+		id="business1">
+		<property name="simulator" ref="dataAccessSimulator"></property>
+	</bean>
+	<bean
+		class="org.javacream.training.batch.spring.business.xml.Business1"
+		id="business1_1">
+		<property name="simulator" ref="dataAccessSimulator"></property>
+	</bean>
+
+	<bean
+		class="org.javacream.training.batch.spring.business.xml.SpecialBusiness1"
+		id="special_business1_1">
+		<property name="simulator" ref="dataAccessSimulator"></property>
+	</bean>
+	<bean
+		class="org.javacream.training.batch.spring.business.xml.Business2"
+		id="business2">
+		<property name="simulator" ref="dataAccessSimulator"></property>
+	</bean>
+	<bean
+		class="org.javacream.training.batch.spring.business.xml.DataAccessSimulator"
+		id="dataAccessSimulator"></bean>
+
+
+
+</beans>
