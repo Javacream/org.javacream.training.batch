@@ -15,14 +15,14 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableBatchProcessing
 @Configuration
-public class SimpleBatchTaskConfiguration {
+public class SimpleTaskletConfiguration {
 
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 	@Autowired
-	private SimpleBatchTask simpleTasklet;
+	private SimpleTasklet simpleTasklet;
 
 	@Bean
 	Step simpleStep() {

@@ -7,7 +7,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SimpleBatchTask implements Tasklet{
+public class SimpleTasklet implements Tasklet{
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
