@@ -11,10 +11,13 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.TaskletStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
 @EnableBatchProcessing
 //@Configuration
-public class SimpleTaskletConfiguration {
+@ImportResource("classpath:simple-tasklet-job.xml")
+public class SimpleTaskletXmlConfiguration {
 
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
@@ -23,13 +26,13 @@ public class SimpleTaskletConfiguration {
 	@Autowired
 	private SimpleTasklet simpleTasklet;
 
-	@Bean
+//	@Bean
 	Step simpleStep() {
 		TaskletStep step = stepBuilderFactory.get("step1").tasklet(simpleTasklet).build();
 		return step;
 	}
 
-	@Bean
+//	@Bean
 	public Job job(Step simpleStep) throws Exception {
 		JobBuilder jobBuilder = jobBuilderFactory.get("job1").incrementer(new RunIdIncrementer());
 		SimpleJobBuilder startJob = jobBuilder.start(simpleStep);

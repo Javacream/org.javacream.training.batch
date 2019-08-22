@@ -8,25 +8,32 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.step.tasklet.TaskletStep;
+import org.springframework.batch.core.step.builder.SimpleStepBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @EnableBatchProcessing
-//@Configuration
-public class SimpleTaskletConfiguration {
+@Configuration
+public class SimpleChunkConfiguration {
 
+	@Value("${simple.chunk.size}")
+	private int chunkSize;
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
-	@Autowired
-	private SimpleTasklet simpleTasklet;
 
+	@Autowired private SimpleItemReader simpleItemReader;
+	@Autowired private SimpleItemProcessor simpleItemProcessor;
+	@Autowired private SimpleItemWriter simpleItemWriter;
+	
 	@Bean
 	Step simpleStep() {
-		TaskletStep step = stepBuilderFactory.get("step1").tasklet(simpleTasklet).build();
-		return step;
+		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").chunk(chunkSize);
+		chunk.reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
+		return chunk.build();
 	}
 
 	@Bean
