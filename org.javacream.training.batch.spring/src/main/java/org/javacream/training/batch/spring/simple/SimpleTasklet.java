@@ -1,4 +1,4 @@
-package org.javacream.training.batch.spring.demo;
+package org.javacream.training.batch.spring.simple;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;

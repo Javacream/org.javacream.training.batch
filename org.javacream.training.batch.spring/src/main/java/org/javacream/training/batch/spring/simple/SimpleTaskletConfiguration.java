@@ -1,4 +1,4 @@
-package org.javacream.training.batch.spring.demo;
+package org.javacream.training.batch.spring.simple;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
