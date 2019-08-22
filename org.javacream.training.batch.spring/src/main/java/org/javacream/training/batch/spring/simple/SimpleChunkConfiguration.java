@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.builder.FaultTolerantStepBuilder;
 import org.springframework.batch.core.step.builder.SimpleStepBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @EnableBatchProcessing
-@Configuration
+//@Configuration
 public class SimpleChunkConfiguration {
 
 	@Value("${simple.chunk.size}")
@@ -31,9 +32,11 @@ public class SimpleChunkConfiguration {
 	
 	@Bean
 	Step simpleStep() {
-		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").chunk(chunkSize);
-		chunk.reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
-		return chunk.build();
+//		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").<String, Integer>chunk(chunkSize);
+//		chunk.reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
+		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").<String, Integer>chunk(chunkSize).reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
+		FaultTolerantStepBuilder<String, Integer> tolerantChunk = chunk.faultTolerant();
+		return tolerantChunk.build();
 	}
 
 	@Bean

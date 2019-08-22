@@ -14,6 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleItemReader implements ItemReader<String> {
 
+	private String prefix;
+	
+	
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
 	private LinkedList<String> names = new LinkedList<>();
 
 	@PostConstruct
