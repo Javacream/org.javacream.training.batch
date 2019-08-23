@@ -9,7 +9,7 @@
 		class="org.javacream.training.batch.spring.simple.SimpleItemReader"
 		id="simpleItemReader">
 	</bean>
-	<batch:job id="simpleChunk">
+	<batch:job id="simpleChunk" restartable="true">
 		<batch:step id="step1">
 			<batch:tasklet>
 				<batch:chunk reader="simpleItemReader" 

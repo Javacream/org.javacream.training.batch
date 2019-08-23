@@ -26,6 +26,9 @@ public class SimpleChunkConfiguration {
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 
+	
+
+	
 	@Autowired private SimpleItemReader simpleItemReader;
 	@Autowired private SimpleItemProcessor simpleItemProcessor;
 	@Autowired private SimpleItemWriter simpleItemWriter;
@@ -47,5 +50,6 @@ public class SimpleChunkConfiguration {
 		Job job = builderWithStep.build();
 		return job;
 	}
+	
 
 }
