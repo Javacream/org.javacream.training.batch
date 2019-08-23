@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @EnableBatchProcessing
-//@Configuration
+@Configuration
 public class SimpleChunkConfiguration {
 
 	@Value("${simple.chunk.size}")
@@ -41,9 +41,11 @@ public class SimpleChunkConfiguration {
 
 	@Bean
 	public Job job(Step simpleStep) throws Exception {
-		JobBuilder jobBuilder = jobBuilderFactory.get("job1").incrementer(new RunIdIncrementer());
-		SimpleJobBuilder startJob = jobBuilder.start(simpleStep);
-		return startJob.build();
+		JobBuilder namedJobBuilder = jobBuilderFactory.get("job1");
+		JobBuilder jobBuilder = namedJobBuilder.incrementer(new RunIdIncrementer());
+		SimpleJobBuilder builderWithStep = jobBuilder.start(simpleStep);
+		Job job = builderWithStep.build();
+		return job;
 	}
 
 }

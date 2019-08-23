@@ -12,11 +12,13 @@
 	<batch:job id="simpleChunk">
 		<batch:step id="step1">
 			<batch:tasklet>
-				<batch:chunk reader="simpleItemReader"
+				<batch:chunk reader="simpleItemReader" 
 					processor="simpleItemProcessor" writer="simpleItemWriter"
 					commit-interval="${simple.chunk.size}">
 				</batch:chunk>
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
+	
+	
 </beans>
