@@ -25,18 +25,12 @@ public class SimpleChunkConfiguration {
 	private JobBuilderFactory jobBuilderFactory;
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
-
-	
-
-	
 	@Autowired private SimpleItemReader simpleItemReader;
 	@Autowired private SimpleItemProcessor simpleItemProcessor;
 	@Autowired private SimpleItemWriter simpleItemWriter;
 	
 	@Bean
 	Step simpleStep() {
-//		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").<String, Integer>chunk(chunkSize);
-//		chunk.reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
 		SimpleStepBuilder<String, Integer> chunk = stepBuilderFactory.get("step1").<String, Integer>chunk(chunkSize).reader(simpleItemReader).processor(simpleItemProcessor).writer(simpleItemWriter);
 		FaultTolerantStepBuilder<String, Integer> tolerantChunk = chunk.faultTolerant();
 		return tolerantChunk.build();
