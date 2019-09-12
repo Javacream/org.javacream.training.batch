@@ -1,5 +1,8 @@
 package org.javacream.training.batch.spring.simple;
 
+import org.javacream.training.batch.spring.simple.simplestep.SimpleItemProcessor;
+import org.javacream.training.batch.spring.simple.simplestep.SimpleItemReader;
+import org.javacream.training.batch.spring.simple.simplestep.SimpleItemWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -24,7 +27,7 @@ public class BatchConfiguration {
 	
 	@Bean
 	public Job job(Step step) throws Exception {
-		JobBuilder jobBuilder = jobBuilderFactory.get("job2");//.incrementer(new RunIdIncrementer());
+		JobBuilder jobBuilder = jobBuilderFactory.get("job2").incrementer(new RunIdIncrementer());
 		SimpleJobBuilder startJob = jobBuilder.start(step);
 		return startJob.build();
 	}
