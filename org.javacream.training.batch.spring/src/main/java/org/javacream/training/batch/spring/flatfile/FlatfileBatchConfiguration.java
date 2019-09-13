@@ -48,11 +48,11 @@ public class FlatfileBatchConfiguration {
 	ItemWriter<Person> writer() {
 		return new FlatFileItemWriterBuilder<Person>().name("itemWriter")
 				.resource(new FileSystemResource("data/out/people.txt"))
-				.lineAggregator(new PassThroughLineAggregator<Person>()).build();
+				.lineAggregator(new PassThroughLineAggregator<Person>()).append(true).build();
 	}
 
 	@Bean Step step(ItemReader<Person> reader, ItemWriter<Person> writer) {
-		return stepBuilderFactory.get("step1").<Person, Person>chunk(3).reader(reader).writer(writer).build();
+		return stepBuilderFactory.get("step1").<Person, Person>chunk(2).reader(reader).writer(writer).build();
 	}
 	@Bean
 	public Job job(Step step) throws Exception {
