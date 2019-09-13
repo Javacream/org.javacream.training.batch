@@ -52,7 +52,7 @@ public class FlatfileBatchConfiguration {
 	}
 
 	@Bean Step step(ItemReader<Person> reader, ItemWriter<Person> writer) {
-		return stepBuilderFactory.get("step1").<Person, Person>chunk(3).faultTolerant().skipLimit(5).skip(Exception.class).reader(reader).writer(writer).build();
+		return stepBuilderFactory.get("step1").<Person, Person>chunk(3).reader(reader).writer(writer).build();
 	}
 	@Bean
 	public Job job(Step step) throws Exception {
