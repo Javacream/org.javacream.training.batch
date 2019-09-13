@@ -13,9 +13,8 @@ import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @EnableBatchProcessing
 public class BatchConfiguration {
 	@Autowired private JobBuilderFactory jobBuilderFactory;

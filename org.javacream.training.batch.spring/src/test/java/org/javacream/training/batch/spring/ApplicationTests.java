@@ -4,15 +4,6 @@ package org.javacream.training.batch.spring;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,16 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ApplicationTests {
 	
-	@Autowired JobLauncher launcher;
-	@Autowired JobOperator operator;
-	@Autowired Job job;
 	@Test
 	public void contextLoads() {
 	}
-	@Test
-	public void runJob() throws Exception, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-		JobParameters params = new JobParametersBuilder().addString("this", "that_1").addLong("date", System.currentTimeMillis()).toJobParameters();
-		launcher.run(job, params);
-	}
-
 }
