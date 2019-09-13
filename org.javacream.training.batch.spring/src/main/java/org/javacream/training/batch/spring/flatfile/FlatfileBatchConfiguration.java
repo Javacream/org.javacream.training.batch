@@ -16,6 +16,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -48,11 +49,14 @@ public class FlatfileBatchConfiguration {
 	ItemWriter<Person> writer() {
 		return new FlatFileItemWriterBuilder<Person>().name("itemWriter")
 				.resource(new FileSystemResource("data/out/people.txt"))
-				.lineAggregator(new PassThroughLineAggregator<Person>()).append(true).build();
+				.lineAggregator(new PassThroughLineAggregator<Person>()).build();
 	}
 
 	@Bean Step step(ItemReader<Person> reader, ItemWriter<Person> writer) {
-		return stepBuilderFactory.get("step1").<Person, Person>chunk(2).reader(reader).writer(writer).build();
+		return stepBuilderFactory.get("step1").<Person, Person>chunk(1).reader(reader).writer(writer)
+				
+				//.faultTolerant().skip(Exception.class).skipLimit(3)
+				.build();
 	}
 	@Bean
 	public Job job(Step step) throws Exception {
