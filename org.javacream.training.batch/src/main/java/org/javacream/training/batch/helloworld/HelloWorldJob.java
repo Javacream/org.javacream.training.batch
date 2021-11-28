@@ -39,7 +39,7 @@ public class HelloWorldJob {
 		@Bean
 		public Job job() {
 			return this.jobBuilderFactory.get("job")
-					.start(step()).incrementer(new RunIdIncrementer())
+					.start(step())
 					.build();
 		}
 
