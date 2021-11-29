@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableBatchProcessing
-public class HelloWorldJob {
+public class HelloWorldJobConfiguration {
 
 	@Autowired private JobBuilderFactory jobBuilderFactory;
 	@Autowired private StepBuilderFactory stepBuilderFactory;
@@ -34,10 +34,10 @@ public class HelloWorldJob {
 	@Bean public Job helloWorldJob() {
 		return jobBuilderFactory.get("hello-world-job").start(helloWorldStep()).build();
 	}
-	
+	/*
 	//Analogie Eine Methode mit einer Anweisung
 	public void sayHello() {
 		System.out.println("Hello World!");
 	}
-	
+	*/
 }
