@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,7 +35,7 @@ public class HelloWorldJobConfiguration {
 
 	}
 
-	@Bean
+	@Bean @Qualifier("helloWorld")
 	public Job helloWorldJob() {
 		return jobBuilderFactory.get("goodbye-moon-job").start(helloWorldStep()).build();
 	}
