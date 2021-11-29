@@ -17,27 +17,36 @@ import org.springframework.context.annotation.Configuration;
 @EnableBatchProcessing
 public class HelloWorldJobConfiguration {
 
-	@Autowired private JobBuilderFactory jobBuilderFactory;
-	@Autowired private StepBuilderFactory stepBuilderFactory;
-	
-	@Bean public Step helloWorldStep() {
-		Step helloWorldStep = stepBuilderFactory.get("hello-world").tasklet(new Tasklet() {
-			@Override
-			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				System.out.println("Hello World!");
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+	@Autowired
+	private JobBuilderFactory jobBuilderFactory;
+	@Autowired
+	private StepBuilderFactory stepBuilderFactory;
+
+	@Bean
+	public Step helloWorldStep() {
+//		HelloWorldTasklet hwt = new HelloWorldTasklet();
+//		Step helloWorldStep = stepBuilderFactory.get("hello-world").tasklet(hwt).build();
+		Step helloWorldStep = stepBuilderFactory.get("hello-world")
+				.tasklet((StepContribution contribution, ChunkContext chunkContext) -> {
+					System.out.println("Hello World");
+					return RepeatStatus.FINISHED;
+				}).build();
 		return helloWorldStep;
+
 	}
-	
-	@Bean public Job helloWorldJob() {
+
+	@Bean
+	public Job helloWorldJob() {
 		return jobBuilderFactory.get("hello-world-job").start(helloWorldStep()).build();
 	}
-	/*
-	//Analogie Eine Methode mit einer Anweisung
-	public void sayHello() {
-		System.out.println("Hello World!");
-	}
-	*/
+
+//	public class HelloWorldTasklet implements Tasklet {
+//
+//		@Override
+//		public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+//			System.out.println("Hello World!");
+//			return RepeatStatus.FINISHED;
+//		}
+//
+//	}
 }
