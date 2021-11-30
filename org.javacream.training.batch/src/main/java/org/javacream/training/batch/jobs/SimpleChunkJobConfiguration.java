@@ -16,10 +16,15 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 @EnableBatchProcessing
@@ -75,6 +80,15 @@ public class SimpleChunkJobConfiguration {
 			System.out.println(items);
 		}
 
+	}
+
+	@Bean public FlatFileItemReader<String> fileReader(){
+		ClassPathResource resource = new ClassPathResource("names.txt");
+		return new FlatFileItemReaderBuilder<String>().addComment("#").resource(resource).targetType(String.class).build();
+	}
+	@Bean public FlatFileItemWriter<String> fileWriter(){
+		ClassPathResource resource = new ClassPathResource("nameLength.txt");
+		return new FlatFileItemWriterBuilder<String>().resource(resource).build();
 	}
 
 	public static class NamesItemReader implements ItemReader<String> {
