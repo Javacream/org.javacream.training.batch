@@ -25,8 +25,8 @@ public class JobRestController {
 	@Qualifier("helloWorld")
 	private Job helloWorldJob;
 	@Autowired
-	@Qualifier("simpleJunk")
-	private Job simpleJunkJob;
+	@Qualifier("simpleChunk")
+	private Job simpleChunkJob;
 
 	@GetMapping(path = "api/jobs/{name}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@PathVariable("name") String jobName) {
@@ -37,8 +37,8 @@ public class JobRestController {
 		try {
 			if ("helloWorld".equals(jobName)) {
 				launcher.run(helloWorldJob, jobParameters);
-			} else if ("simpleJunk".equals(jobName)) {
-				launcher.run(simpleJunkJob, jobParameters);
+			} else if ("simpleChunk".equals(jobName)) {
+				launcher.run(simpleChunkJob, jobParameters);
 			}
 
 			// else -> Dispatching auf andere Jobs

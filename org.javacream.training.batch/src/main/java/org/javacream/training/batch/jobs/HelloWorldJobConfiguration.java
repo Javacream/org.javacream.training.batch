@@ -1,13 +1,12 @@
 package org.javacream.training.batch.jobs;
 
+import org.javacream.training.batch.business.HelloWorld;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.core.step.tasklet.MethodInvokingTaskletAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -22,29 +21,24 @@ public class HelloWorldJobConfiguration {
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 
+	@Autowired private HelloWorld helloWorld;
+	@Bean MethodInvokingTaskletAdapter methodInvokingTaskletAdapter() {
+		MethodInvokingTaskletAdapter adapter = new  MethodInvokingTaskletAdapter();
+		adapter.setTargetMethod("sayHello");
+		adapter.setTargetObject(helloWorld);
+		return adapter;
+	}
 	@Bean @Qualifier("hello-world")
 	public Step  helloWorldStep() {
-		Step helloWorldStep = stepBuilderFactory.get("goodbye-moon2")
-				.tasklet((StepContribution contribution, ChunkContext chunkContext) -> {
-					System.out.println("Goodbye Moon");
-					return RepeatStatus.FINISHED;
-				}).build();
+		Step helloWorldStep = stepBuilderFactory.get("hello-world")
+				.tasklet(methodInvokingTaskletAdapter()).build();
 		return helloWorldStep;
 
 	}
 
 	@Bean @Qualifier("helloWorld")
 	public Job helloWorldJob() {
-		return jobBuilderFactory.get("goodbye-moon-job").start(helloWorldStep()).build();
+		return jobBuilderFactory.get("hello-world-job").start(helloWorldStep()).build();
 	}
 
-//	public class HelloWorldTasklet implements Tasklet {
-//
-//		@Override
-//		public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-//			System.out.println("Hello World!");
-//			return RepeatStatus.FINISHED;
-//		}
-//
-//	}
 }
