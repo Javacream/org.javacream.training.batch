@@ -35,8 +35,8 @@ public class SimpleChunkJobConfiguration {
 	@Bean
 	@Qualifier("simpleChunk")
 	public Step simpleChunkStep() {
-		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader(null))
-				.processor(nameToSizeProcessor()).writer(fileWriter(null)).build();
+		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader(null, null))
+				.processor(nameToSizeProcessor()).writer(fileWriter(null, null)).build();
 		return simpleChunkStep;
 
 	}
@@ -62,11 +62,14 @@ public class SimpleChunkJobConfiguration {
 
 	}
 
-	@Bean @StepScope public FlatFileItemReader<String> fileReader(@Value("#{jobParameters['inFile']}") String inputFile){
+	@Bean @StepScope public FlatFileItemReader<String> fileReader(@Value("#{jobParameters['inFile']}") String inputFile, JobData jobData){
+		//JobData jobData = new JobData();
+		jobData.setMessage("Hello from Reader!");
 		Resource resource = new FileSystemResource("src/data/input/" + inputFile);
 		return new FlatFileItemReaderBuilder<String>().lineMapper(new PassThroughLineMapper()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
 	}
-	@Bean @StepScope public FlatFileItemWriter<Integer> fileWriter(@Value("#{jobParameters['outFile']}") String outputFile){
+	@Bean @StepScope public FlatFileItemWriter<Integer> fileWriter(@Value("#{jobParameters['outFile']}") String outputFile, JobData jobData){
+		System.out.println(jobData.getMessage());
 		Resource resource = new FileSystemResource("src/data/output/" + outputFile);
 		return new FlatFileItemWriterBuilder<Integer>().name("nameFileWriter").lineAggregator(new PassThroughLineAggregator<Integer>()).resource(resource).build();
 	}
