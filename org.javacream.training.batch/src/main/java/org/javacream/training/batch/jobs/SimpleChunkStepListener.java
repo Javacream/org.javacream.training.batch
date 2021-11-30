@@ -1,7 +1,8 @@
 package org.javacream.training.batch.jobs;
 
-import javax.batch.runtime.StepExecution;
 
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.core.annotation.BeforeStep;
 
@@ -12,10 +13,9 @@ public class SimpleChunkStepListener {
 		System.out.println("before step " + stepExecution.getStepName());
 	}
 	@AfterStep
-	public String invokedAfterStep(StepExecution stepExecution) {
+	public ExitStatus invokedAfterStep(StepExecution stepExecution) {
 		System.out.println("after step " + stepExecution.getStepName());
-		//return stepExecution.getExitStatus();
-		return "Hugo";
+		return stepExecution.getExitStatus();
 	}
 
 }
