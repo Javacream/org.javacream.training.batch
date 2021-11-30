@@ -22,10 +22,8 @@ public class HelloWorldJobConfiguration {
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 
-	@Bean
-	public Step helloWorldStep() {
-//		HelloWorldTasklet hwt = new HelloWorldTasklet();
-//		Step helloWorldStep = stepBuilderFactory.get("hello-world").tasklet(hwt).build();
+	@Bean @Qualifier("hello-world")
+	public Step  helloWorldStep() {
 		Step helloWorldStep = stepBuilderFactory.get("goodbye-moon2")
 				.tasklet((StepContribution contribution, ChunkContext chunkContext) -> {
 					System.out.println("Goodbye Moon");

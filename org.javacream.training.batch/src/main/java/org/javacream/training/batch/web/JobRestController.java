@@ -20,9 +20,14 @@ public class JobRestController {
 
 	@Autowired
 	private JobLauncher launcher;
-	
-	@Autowired @Qualifier("helloWorld")  private Job helloWorldJob;
-	
+
+	@Autowired
+	@Qualifier("helloWorld")
+	private Job helloWorldJob;
+	@Autowired
+	@Qualifier("simpleJunk")
+	private Job simpleJunkJob;
+
 	@GetMapping(path = "api/jobs/{name}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@PathVariable("name") String jobName) {
 		System.out.println("received name " + jobName);
@@ -31,8 +36,12 @@ public class JobRestController {
 				.toJobParameters();
 		try {
 			if ("helloWorld".equals(jobName)) {
-			launcher.run(helloWorldJob, jobParameters);
-			}//else -> Dispatching auf andere Jobs
+				launcher.run(helloWorldJob, jobParameters);
+			} else if ("simpleJunk".equals(jobName)) {
+				launcher.run(simpleJunkJob, jobParameters);
+			}
+
+			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			e.printStackTrace();
