@@ -11,8 +11,9 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,12 +29,13 @@ public class JobRestController {
 	@Qualifier("simpleChunk")
 	private Job simpleChunkJob;
 
-	@GetMapping(path = "api/jobs/{name}", produces = MediaType.TEXT_PLAIN_VALUE)
-	public String executeJob(@PathVariable("name") String jobName) {
-		System.out.println("received name " + jobName);
-		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
+	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
+	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
+		System.out.println("received launch request " + jobLaunchRequest);
+		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobLaunchRequest.getJobParameters());
 		JobParameters jobParameters = jobParametersBuilder.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters();
+		String jobName = jobLaunchRequest.getJobName();
 		try {
 			if ("helloWorld".equals(jobName)) {
 				launcher.run(helloWorldJob, jobParameters);
