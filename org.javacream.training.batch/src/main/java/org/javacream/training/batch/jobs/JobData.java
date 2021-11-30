@@ -3,8 +3,10 @@ package org.javacream.training.batch.jobs;
 import java.util.Objects;
 
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.stereotype.Component;
 
 @StepScope
+@Component
 public class JobData {
 	private String message;
 	private String name;
