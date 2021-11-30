@@ -1,22 +1,24 @@
 package org.javacream.training.batch.jobs;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
-import org.springframework.batch.item.file.mapping.ArrayFieldSetMapper;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -33,8 +35,8 @@ public class SimpleChunkJobConfiguration {
 	@Bean
 	@Qualifier("simpleChunk")
 	public Step simpleChunkStep() {
-		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader())
-				.processor(nameToSizeProcessor()).writer(fileWriter()).build();
+		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader(null))
+				.processor(nameToSizeProcessor()).writer(fileWriter(null)).build();
 		return simpleChunkStep;
 
 	}
@@ -42,11 +44,11 @@ public class SimpleChunkJobConfiguration {
 	@Bean
 	@Qualifier("simpleChunk")
 	public Job simpleChunkJob() {
-		return jobBuilderFactory.get("simpleChunk").start(simpleChunkStep()).build();
+		return jobBuilderFactory.get("simpleChunk").start(simpleChunkStep()).validator(new SimpleChunkJobParameterValidator()).build();
 	}
 
 
-	@Bean
+	@Bean @StepScope
 	public NameToSizeProcessor nameToSizeProcessor() {
 		return new NameToSizeProcessor();
 	}
@@ -60,13 +62,23 @@ public class SimpleChunkJobConfiguration {
 
 	}
 
-	@Bean public FlatFileItemReader<String> fileReader(){
-		Resource resource = new FileSystemResource("src/data/input/names.txt");
+	@Bean @StepScope private FlatFileItemReader<String> fileReader(@Value("#{jobParameters['inFile']}") String inputFile){
+		Resource resource = new FileSystemResource("src/data/input/" + inputFile);
 		return new FlatFileItemReaderBuilder<String>().lineMapper(new PassThroughLineMapper()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
 	}
-	@Bean public FlatFileItemWriter<Integer> fileWriter(){
-		Resource resource = new FileSystemResource("src/data/output/nameLength.txt");
+	@Bean @StepScope public FlatFileItemWriter<Integer> fileWriter(@Value("#{jobParameters['outFile']}") String outputFile){
+		Resource resource = new FileSystemResource("src/data/output/" + outputFile);
 		return new FlatFileItemWriterBuilder<Integer>().name("nameFileWriter").lineAggregator(new PassThroughLineAggregator<Integer>()).resource(resource).build();
 	}
 
+	public static class SimpleChunkJobParameterValidator implements JobParametersValidator{
+
+		@Override
+		public void validate(JobParameters parameters) throws JobParametersInvalidException {
+			if (parameters.getString("inFile")== null || parameters.getString("outFile") == null) {
+				throw new JobParametersInvalidException("inFile and outFile must be set");
+			}
+		}
+		
+	}
 }
