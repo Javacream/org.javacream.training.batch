@@ -36,7 +36,7 @@ public class SimpleChunkJobConfiguration {
 	@Qualifier("simpleChunk")
 	public Step simpleChunkStep() {
 		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader(null, null))
-				.processor(nameToSizeProcessor()).writer(fileWriter(null, null)).build();
+				.processor(nameToSizeProcessor()).writer(fileWriter(null, null)).listener(new SimpleChunkStepListener()).build();
 		return simpleChunkStep;
 
 	}
