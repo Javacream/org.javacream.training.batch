@@ -10,13 +10,15 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.file.mapping.ArrayFieldSetMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
@@ -60,10 +62,10 @@ public class SimpleChunkJobConfiguration {
 
 	@Bean public FlatFileItemReader<String> fileReader(){
 		Resource resource = new FileSystemResource("src/data/input/names.txt");
-		return new FlatFileItemReaderBuilder<String>().lineTokenizer(new DelimitedLineTokenizer()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
+		return new FlatFileItemReaderBuilder<String>().lineMapper(new PassThroughLineMapper()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
 	}
 	@Bean public FlatFileItemWriter<Integer> fileWriter(){
-		Resource resource = new FileSystemResource("src/data/output/nameLenth.txt");
+		Resource resource = new FileSystemResource("src/data/output/nameLength.txt");
 		return new FlatFileItemWriterBuilder<Integer>().name("nameFileWriter").lineAggregator(new PassThroughLineAggregator<Integer>()).resource(resource).build();
 	}
 
