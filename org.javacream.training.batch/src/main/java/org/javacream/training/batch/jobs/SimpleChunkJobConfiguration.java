@@ -1,30 +1,24 @@
 package org.javacream.training.batch.jobs;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 @Configuration
 @EnableBatchProcessing
@@ -37,8 +31,8 @@ public class SimpleChunkJobConfiguration {
 	@Bean
 	@Qualifier("simpleChunk")
 	public Step simpleChunkStep() {
-		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(namesItemReader())
-				.processor(nameToSizeProcessor()).writer(namesSizeWriter()).build();
+		Step simpleChunkStep = stepBuilderFactory.get("simpleChunk").<String, Integer>chunk(3).reader(fileReader())
+				.processor(nameToSizeProcessor()).writer(fileWriter()).build();
 		return simpleChunkStep;
 
 	}
@@ -49,15 +43,6 @@ public class SimpleChunkJobConfiguration {
 		return jobBuilderFactory.get("simpleChunk").start(simpleChunkStep()).build();
 	}
 
-	@Bean
-	public NamesItemReader namesItemReader() {
-		return new NamesItemReader();
-	}
-
-	@Bean
-	public NameSizeWriter namesSizeWriter() {
-		return new NameSizeWriter();
-	}
 
 	@Bean
 	public NameToSizeProcessor nameToSizeProcessor() {
@@ -73,46 +58,13 @@ public class SimpleChunkJobConfiguration {
 
 	}
 
-	public static class NameSizeWriter implements ItemWriter<Integer> {
-
-		@Override
-		public void write(List<? extends Integer> items) throws Exception {
-			System.out.println(items);
-		}
-
-	}
-
 	@Bean public FlatFileItemReader<String> fileReader(){
-		ClassPathResource resource = new ClassPathResource("names.txt");
-		return new FlatFileItemReaderBuilder<String>().addComment("#").resource(resource).targetType(String.class).build();
+		Resource resource = new FileSystemResource("src/data/input/names.txt");
+		return new FlatFileItemReaderBuilder<String>().lineTokenizer(new DelimitedLineTokenizer()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
 	}
-	@Bean public FlatFileItemWriter<String> fileWriter(){
-		ClassPathResource resource = new ClassPathResource("nameLength.txt");
-		return new FlatFileItemWriterBuilder<String>().resource(resource).build();
+	@Bean public FlatFileItemWriter<Integer> fileWriter(){
+		Resource resource = new FileSystemResource("src/data/output/nameLenth.txt");
+		return new FlatFileItemWriterBuilder<Integer>().name("nameFileWriter").lineAggregator(new PassThroughLineAggregator<Integer>()).resource(resource).build();
 	}
 
-	public static class NamesItemReader implements ItemReader<String> {
-		private LinkedList<String> names = new LinkedList<>();
-
-		@PostConstruct
-		public void initNames() {
-			names.add("Hugo");
-			names.add("Emil");
-			names.add("Franz");
-			names.add("Martha");
-			names.add("Julia");
-			names.add("Michelle");
-			names.add("Anna");
-		}
-
-		@Override
-		public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-			if (names.size() == 0) {
-				return null;
-			}
-
-			return names.removeFirst();
-		}
-
-	}
 }
