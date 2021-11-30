@@ -62,7 +62,7 @@ public class SimpleChunkJobConfiguration {
 
 	}
 
-	@Bean @StepScope private FlatFileItemReader<String> fileReader(@Value("#{jobParameters['inFile']}") String inputFile){
+	@Bean @StepScope public FlatFileItemReader<String> fileReader(@Value("#{jobParameters['inFile']}") String inputFile){
 		Resource resource = new FileSystemResource("src/data/input/" + inputFile);
 		return new FlatFileItemReaderBuilder<String>().lineMapper(new PassThroughLineMapper()).addComment("#").resource(resource).name("nameFileReader").targetType(String.class).build();
 	}
