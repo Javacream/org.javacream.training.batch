@@ -23,7 +23,6 @@ public class HelloWorldJobConfiguration {
 		return stepBuilderFactory.get("hello-moon-step").tasklet(new SimpleTasklet()).build();
 	}
 	@Bean @Qualifier("helloWorld") public Job helloWorldJob() {
-		return jobBuilderFactory.get("hello-moon-job").incrementer(new RunIdIncrementer()).start(helloWorldPrintlnStep()).build();
+		return jobBuilderFactory.get("hello-moon-job").start(helloWorldPrintlnStep()).build();
 	}
-
 }

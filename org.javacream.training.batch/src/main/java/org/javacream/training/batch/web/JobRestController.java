@@ -1,5 +1,7 @@
 package org.javacream.training.batch.web;
 
+import java.util.Properties;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -21,20 +23,27 @@ public class JobRestController {
 	@Autowired
 	private JobLauncher launcher;
 
-	@Autowired
-	@Qualifier("helloWorld")
+	@Autowired @Qualifier("helloWorld")
 	private Job helloWorldJob;
+	@Autowired 	@Qualifier("simpleSequence")
+	private Job simpleSequenceJob;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
 		System.out.println("received launch request " + jobLaunchRequest);
-		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobLaunchRequest.getJobParameters());
-		JobParameters jobParameters = jobParametersBuilder.addLong("timestamp", System.currentTimeMillis())
-				.toJobParameters();
+		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
+		Properties props = jobLaunchRequest.getJobParameters();
+		
+		for(String paramname: props.stringPropertyNames()) {
+			jobParametersBuilder.addString(paramname, props.getProperty(paramname), true);	
+		}
+		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
 		try {
 			if ("helloWorld".equals(jobName)) {
 				launcher.run(helloWorldJob, jobParameters);
+			} else if ("simpleSequenceJob".equals(jobName)) {
+				launcher.run(simpleSequenceJob, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
