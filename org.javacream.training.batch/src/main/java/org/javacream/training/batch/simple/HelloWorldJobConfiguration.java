@@ -7,6 +7,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +22,7 @@ public class HelloWorldJobConfiguration {
 	@Bean public Step helloWorldPrintlnStep() {
 		return stepBuilderFactory.get("hello-moon-step").tasklet(new SimpleTasklet()).build();
 	}
-	@Bean public Job helloWorldJob() {
+	@Bean @Qualifier("helloWorld") public Job helloWorldJob() {
 		return jobBuilderFactory.get("hello-moon-job").incrementer(new RunIdIncrementer()).start(helloWorldPrintlnStep()).build();
 	}
 
