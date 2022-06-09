@@ -1,0 +1,1 @@
+java -cp <check_location_in_maven_dependencies> org.h2.tools.Server -web -webAllowOthers -tcp tcpAllowOthers ifNotExists
