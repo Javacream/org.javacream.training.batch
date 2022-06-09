@@ -5,6 +5,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +19,10 @@ public class HelloWorldJobConfiguration {
 	
 	
 	@Bean public Step helloWorldPrintlnStep() {
-		return stepBuilderFactory.get("hello-world-step").tasklet(new SimpleTasklet()).build();
+		return stepBuilderFactory.get("hello-moon-step").tasklet(new SimpleTasklet()).build();
 	}
 	@Bean public Job helloWorldJob() {
-		return jobBuilderFactory.get("hello-world-job").start(helloWorldPrintlnStep()).build();
+		return jobBuilderFactory.get("hello-moon-job").incrementer(new RunIdIncrementer()).start(helloWorldPrintlnStep()).build();
 	}
 
 }
