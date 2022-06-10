@@ -48,7 +48,7 @@ public class JobRestController {
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			return e.getMessage();
 		}
 		return "OK";

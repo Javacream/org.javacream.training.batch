@@ -29,7 +29,7 @@ public class SequenceFlowConfiguration {
 					org.springframework.batch.core.scope.context.ChunkContext chunkContext) throws Exception {
 				System.out.println("step 1 writes property forStep1 "
 						+ chunkContext.getStepContext().getJobParameters().get("forStep1"));
-				//chunkContext.getStepContext().getJobExecutionContext().put("fromStep1", "greetings from step 1!");
+				chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext().put("fromStep1", "greetings from step 1!");
 				return RepeatStatus.FINISHED;
 			}
 		}).build();
