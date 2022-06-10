@@ -2,6 +2,7 @@ package org.javacream.training.batch.sequence;
 
 import java.util.Random;
 
+import org.javacream.training.batch.impl.SimpleBusinessObject;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -17,11 +18,12 @@ public class Step1Tasklet implements Tasklet {
 	@Value("#{jobParameters['forStep1']}")
 	private String name;
 	@Autowired JobData data;
+	@Autowired SimpleBusinessObject simpleBusinessObject;
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			org.springframework.batch.core.scope.context.ChunkContext chunkContext) throws Exception {
-		System.out.println("step 1 receives name " + name);
-		data.setMessage("greetings from step 1 with info " + info);
+		String message = simpleBusinessObject.businessMethod1(name);
+		data.setMessage(message + " with info " + info);
 		return RepeatStatus.FINISHED;
 	}
 
