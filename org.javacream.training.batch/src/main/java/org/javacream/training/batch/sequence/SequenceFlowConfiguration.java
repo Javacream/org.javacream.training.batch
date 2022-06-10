@@ -22,46 +22,21 @@ public class SequenceFlowConfiguration {
 	StepBuilderFactory stepBuilderFactory;
 
 	@Bean
-	public Step step1() {
-		return stepBuilderFactory.get("step1").tasklet(new Tasklet() {
-			@Override
-			public RepeatStatus execute(StepContribution contribution,
-					org.springframework.batch.core.scope.context.ChunkContext chunkContext) throws Exception {
-				System.out.println("step 1 writes property forStep1 "
-						+ chunkContext.getStepContext().getJobParameters().get("forStep1"));
-				chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext().put("fromStep1", "greetings from step 1!");
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+	public Step step1(Step1Tasklet tasklet) {
+		return stepBuilderFactory.get("step1").tasklet(tasklet).build();
 	}
 	@Bean
-	public Step step2() {
-		return stepBuilderFactory.get("step2").tasklet(new Tasklet() {
-			@Override
-			public RepeatStatus execute(StepContribution contribution,
-					org.springframework.batch.core.scope.context.ChunkContext chunkContext) throws Exception {
-				System.out.println("step 2 writes property forStep2 "
-						+ chunkContext.getStepContext().getJobParameters().get("forStep2"));
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+	public Step step2(Step2Tasklet tasklet) {
+		return stepBuilderFactory.get("step2").tasklet(tasklet).build();
 	}
 	@Bean
-	public Step step3() {
-		return stepBuilderFactory.get("step3").tasklet(new Tasklet() {
-			@Override
-			public RepeatStatus execute(StepContribution contribution,
-					org.springframework.batch.core.scope.context.ChunkContext chunkContext) throws Exception {
-				System.out.println("step 3 writes property forStep3 "
-						+ chunkContext.getStepContext().getJobParameters().get("forStep3") + " and greetings " + chunkContext.getStepContext().getJobExecutionContext().get("fromStep1"));
-				return RepeatStatus.FINISHED;
-			}
-		}).build();
+	public Step step3(Step3Tasklet tasklet) {
+		return stepBuilderFactory.get("step3").tasklet(tasklet).build();
 	}
 
 	@Bean
 	@Qualifier("simpleSequence")
-	public Job simpleSequenceJob() {
-		return jobBuilderFactory.get("simple-sequence-job").start(step1()).next(step2()).next(step3()).build();
+	public Job simpleSequenceJob(Step1Tasklet tasklet1, Step2Tasklet tasklet2, Step3Tasklet tasklet3) {
+		return jobBuilderFactory.get("simple-sequence-job").start(step1(tasklet1)).next(step2(tasklet2)).next(step3(tasklet3)).build();
 	}
 }
