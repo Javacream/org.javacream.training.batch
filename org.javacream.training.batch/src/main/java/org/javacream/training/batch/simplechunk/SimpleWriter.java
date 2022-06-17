@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @StepScope
-public class SimpleWriter implements ItemWriter<String>{
+public class SimpleWriter implements ItemWriter<Integer>{
 
 	@Override
-	public void write(List<? extends String> items) throws Exception {
+	public void write(List<? extends Integer> items) throws Exception {
 		System.out.println(items);
 	}
 	
