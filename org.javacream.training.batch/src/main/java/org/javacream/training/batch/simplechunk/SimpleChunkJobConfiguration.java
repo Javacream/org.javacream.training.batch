@@ -19,9 +19,9 @@ public class SimpleChunkJobConfiguration {
 	
 	
 	@Bean public Step chunkStep(SimpleReader reader, SimpleWriter writer, SimpleProcessor processor) {
-		return stepBuilderFactory.get("chunk").<String, Integer>chunk(2).reader(reader).processor(processor).writer(writer).build();
+		return stepBuilderFactory.get("chunk").<String, Integer>chunk(2).reader(reader).processor(processor).writer(writer).allowStartIfComplete(true).build();
 	}
 	@Bean @Qualifier("simpleChunkJob") public Job simpleChunkJob(SimpleReader reader, SimpleWriter writer, SimpleProcessor processor) {
-		return jobBuilderFactory.get("chunkJob").start(chunkStep(reader, writer, processor)).build();
+		return jobBuilderFactory.get("chunkJob").start(chunkStep(reader, writer, processor)). build();
 	}
 }
