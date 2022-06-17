@@ -23,19 +23,24 @@ public class JobRestController {
 	@Autowired
 	private JobLauncher launcher;
 
-	@Autowired @Qualifier("helloWorld")
+	@Autowired
+	@Qualifier("helloWorld")
 	private Job helloWorldJob;
-	@Autowired 	@Qualifier("simpleSequence")
+	@Autowired
+	@Qualifier("simpleSequence")
 	private Job simpleSequenceJob;
+	@Autowired
+	@Qualifier("simpleChunkJob")
+	private Job simpleChunkJob;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
 		System.out.println("received launch request " + jobLaunchRequest);
 		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
 		Properties props = jobLaunchRequest.getJobParameters();
-		
-		for(String paramname: props.stringPropertyNames()) {
-			jobParametersBuilder.addString(paramname, props.getProperty(paramname), true);	
+
+		for (String paramname : props.stringPropertyNames()) {
+			jobParametersBuilder.addString(paramname, props.getProperty(paramname), true);
 		}
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
@@ -44,6 +49,8 @@ public class JobRestController {
 				launcher.run(helloWorldJob, jobParameters);
 			} else if ("simpleSequenceJob".equals(jobName)) {
 				launcher.run(simpleSequenceJob, jobParameters);
+			} else if ("simpleChunkJob".equals(jobName)) {
+				launcher.run(simpleChunkJob, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
