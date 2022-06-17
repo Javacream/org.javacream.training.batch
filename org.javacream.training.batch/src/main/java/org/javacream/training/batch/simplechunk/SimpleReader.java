@@ -29,20 +29,23 @@ public class SimpleReader implements ItemReader<String>{
 		names.add("Fritz");
 		names.add("Emil");
 		names.add("Hugo");
+		names.add("Eduard");
+		names.add("Holger");
 
 		
 	}
 	@Override
 	public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 		System.out.println("################: processed: " + processed + ", shouldThrow:" + shouldThrow);
+		for (int i = 0; i < processed; i++) {
+			names.removeLast();
+		}
 		try {
 			String name = names.removeLast();
 			if (shouldThrow == 0 && "Emil".equals(name)) {
 				executionContext.putInt("shouldThrow", 1);			
 				throw new IllegalArgumentException("Emil is not valid");
 			}
-			processed++;
-			executionContext.putInt("processed", processed);			
 			return name;
 		}
 		catch(NoSuchElementException e) {
