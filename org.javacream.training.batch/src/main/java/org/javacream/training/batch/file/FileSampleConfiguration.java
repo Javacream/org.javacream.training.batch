@@ -1,8 +1,6 @@
 package org.javacream.training.batch.file;
 
 import org.javacream.training.batch.simplechunk.SimpleProcessor;
-import org.javacream.training.batch.simplechunk.SimpleReader;
-import org.javacream.training.batch.simplechunk.SimpleWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -20,32 +18,34 @@ import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 @EnableBatchProcessing
+@Configuration
 public class FileSampleConfiguration {
 
 	@Autowired JobBuilderFactory jobBuilderFactory;
 	@Autowired StepBuilderFactory stepBuilderFactory;
 
 	@Bean @StepScope public FlatFileItemReader<String> fileReader(){
-		Resource input = new FileSystemResource("src/data/input/input.txt");
+		Resource input = new FileSystemResource("src/data/input.txt");
 		LineMapper<String> mapper = new PassThroughLineMapper();
-		return new FlatFileItemReaderBuilder<String>().lineMapper(mapper).resource(input).targetType(String.class).build();
+		return new FlatFileItemReaderBuilder<String>().lineMapper(mapper).resource(input).targetType(String.class).name("fileSampleReader").build();
 	}
 	@Bean @StepScope public FlatFileItemWriter<Integer> fileWriter(){
-		Resource output = new FileSystemResource("src/data/input/output.txt");
+		Resource output = new FileSystemResource("src/data/output.txt");
 		LineAggregator<Integer> aggregator = new PassThroughLineAggregator<Integer>();
-		return new FlatFileItemWriterBuilder<Integer>().resource(output).lineAggregator(aggregator).build();
+		return new FlatFileItemWriterBuilder<Integer>().resource(output).lineAggregator(aggregator).name("fileSampleWriter").build();
 		
 	}
 
 	
 	@Bean public Step fileChunkStep(SimpleProcessor processor) {
-		return stepBuilderFactory.get("chunk").<String, Integer>chunk(2).reader(fileReader()).processor(processor).writer(fileWriter()).allowStartIfComplete(true).build();
+		return stepBuilderFactory.get("fileChunk").<String, Integer>chunk(2).reader(fileReader()).processor(processor).writer(fileWriter()).allowStartIfComplete(true).build();
 	}
-	@Bean @Qualifier("fileChunkJob") public Job fileChunkJob(SimpleReader reader, SimpleWriter writer, SimpleProcessor processor) {
-		return jobBuilderFactory.get("chunkJob").start(fileChunkStep(processor)). build();
+	@Bean @Qualifier("fileChunkJob") public Job fileChunkJob(SimpleProcessor processor) {
+		return jobBuilderFactory.get("fileChunkJob").start(fileChunkStep(processor)). build();
 	}
 }

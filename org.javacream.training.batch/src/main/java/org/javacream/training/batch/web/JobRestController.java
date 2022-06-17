@@ -32,7 +32,11 @@ public class JobRestController {
 	@Autowired
 	@Qualifier("simpleChunkJob")
 	private Job simpleChunkJob;
-	@Autowired private Job simpleXmlChunkJob;
+	@Autowired
+	private Job simpleXmlChunkJob;
+
+	@Autowired @Qualifier("fileChunkJob")
+	private Job fileChunkJob;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
@@ -52,10 +56,13 @@ public class JobRestController {
 				launcher.run(simpleSequenceJob, jobParameters);
 			} else if ("simpleChunkJob".equals(jobName)) {
 				launcher.run(simpleChunkJob, jobParameters);
+			} else if ("simpleXmlChunkJob".equals(jobName)) {
+				launcher.run(simpleXmlChunkJob, jobParameters);
 			}
-			 else if ("simpleXmlChunkJob".equals(jobName)) {
-					launcher.run(simpleXmlChunkJob, jobParameters);
-				}
+			else if ("fileChunkJob".equals(jobName)) {
+				launcher.run(fileChunkJob, jobParameters);
+			}
+
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
