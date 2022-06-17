@@ -31,15 +31,14 @@ public class SimpleReader implements ItemReader<String>{
 		names.add("Hugo");
 		names.add("Eduard");
 		names.add("Holger");
+		for (int i = 0; i < processed; i++) {
+			names.removeLast();
+		}
 
 		
 	}
 	@Override
 	public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		System.out.println("################: processed: " + processed + ", shouldThrow:" + shouldThrow);
-		for (int i = 0; i < processed; i++) {
-			names.removeLast();
-		}
 		try {
 			String name = names.removeLast();
 			if (shouldThrow == 0 && "Emil".equals(name)) {
