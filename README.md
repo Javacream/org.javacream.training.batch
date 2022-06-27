@@ -4,7 +4,7 @@
 
 * Beispiele
   * https://github.com/Javacream/org.javacream.training.batch
-    *  Branch fincon_9.6.2022
+    *  Branch generali_25.8.2022
     
 * Seminarzeiten
   * 8 Unterrichtseinheiten mit jeweils etwa 90 Minuten
@@ -14,4 +14,4 @@
 
 
 * Digitales Flipchart
-  * https://docs.google.com/presentation/d/1nBftH47BRDEuBadc8kyIb8l9QnPlA2dVpzkMSpuq1Ds/edit?usp=sharing
+  * https://docs.google.com/presentation/d/1z2hx8Z-wuzjy6RH8jIItLognbMkgeElj88O-uouxZWo/edit?usp=sharing
