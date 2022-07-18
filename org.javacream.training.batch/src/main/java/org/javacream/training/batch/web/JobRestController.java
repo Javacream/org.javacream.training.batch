@@ -22,14 +22,6 @@ public class JobRestController {
 	private JobLauncher launcher;
 
 	@Autowired
-	@Qualifier("helloWorld")
-	private Job helloWorldJob;
-
-	@Autowired
-	@Qualifier("goodbyeWorld")
-	private Job gwj;
-
-	@Autowired
 	@Qualifier("sequence")
 	private Job sequence;
 
@@ -41,13 +33,7 @@ public class JobRestController {
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
 		try {
-			if ("helloWorld".equals(jobName)) {
-				launcher.run(helloWorldJob, jobParameters);
-			}
-			else if ("bye".equals(jobName)){
-				launcher.run(gwj, jobParameters);
-			}
-			else if ("sequence".equals(jobName)){
+			if ("sequence".equals(jobName)) {
 				launcher.run(sequence, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
