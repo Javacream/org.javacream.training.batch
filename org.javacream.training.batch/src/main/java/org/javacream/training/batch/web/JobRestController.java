@@ -25,15 +25,23 @@ public class JobRestController {
 	@Qualifier("helloWorld")
 	private Job helloWorldJob;
 
+	@Autowired
+	@Qualifier("goodbyeWorld")
+	private Job gwj;
+
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
 		System.out.println("received launch request " + jobLaunchRequest);
 		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobLaunchRequest.getJobParameters());
+		jobParametersBuilder.addLong("timestamp", System.currentTimeMillis());
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
 		try {
 			if ("helloWorld".equals(jobName)) {
 				launcher.run(helloWorldJob, jobParameters);
+			}
+			else if ("bye".equals(jobName)){
+				launcher.run(gwj, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
