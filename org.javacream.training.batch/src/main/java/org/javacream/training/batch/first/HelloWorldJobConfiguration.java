@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +23,7 @@ public class HelloWorldJobConfiguration {
 	}
 	
 	//Spring Boot: Dieser Job wird automatisch (!) gestartet und bekommt als Parametrisierung nichts
-	@Bean public Job helloWorldJob() {
+	@Bean @Qualifier("helloWorld") public Job helloWorldJob() {
 		return jobBuilderFactory.get("hello-world-job").start(helloWorldStep()).build();
 	}
 }
