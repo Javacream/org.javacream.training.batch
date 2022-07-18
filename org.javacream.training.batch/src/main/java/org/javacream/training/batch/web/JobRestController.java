@@ -29,6 +29,10 @@ public class JobRestController {
 	@Qualifier("goodbyeWorld")
 	private Job gwj;
 
+	@Autowired
+	@Qualifier("sequence")
+	private Job sequence;
+
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
 		System.out.println("received launch request " + jobLaunchRequest);
@@ -42,6 +46,9 @@ public class JobRestController {
 			}
 			else if ("bye".equals(jobName)){
 				launcher.run(gwj, jobParameters);
+			}
+			else if ("sequence".equals(jobName)){
+				launcher.run(sequence, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException

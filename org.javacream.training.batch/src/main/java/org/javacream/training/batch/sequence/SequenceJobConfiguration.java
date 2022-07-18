@@ -43,7 +43,7 @@ public class SequenceJobConfiguration {
 		return stepBuilderFactory.get("step3").tasklet(new FirstTasklet()).build();
 	}
 
-	@Bean @Qualifier("simpleSequence") public Job simpleSequenceJob() {
+	@Bean @Qualifier("sequence") public Job simpleSequenceJob() {
 		return jobBuilderFactory.get("second-job").start(step1()).next(step2()).next(step3()).build();
 	}
 
