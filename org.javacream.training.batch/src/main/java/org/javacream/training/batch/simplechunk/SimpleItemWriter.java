@@ -6,7 +6,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("writer")
 @StepScope
 public class SimpleItemWriter implements ItemWriter<Integer>{
 

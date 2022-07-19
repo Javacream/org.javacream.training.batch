@@ -10,7 +10,7 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("reader")
 @StepScope
 public class SimpleItemReader implements ItemReader<String> {
 

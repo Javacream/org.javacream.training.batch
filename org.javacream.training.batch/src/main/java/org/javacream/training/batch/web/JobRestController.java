@@ -22,10 +22,6 @@ public class JobRestController {
 	private JobLauncher launcher;
 
 	@Autowired
-	@Qualifier("sequence")
-	private Job sequence;
-	@Autowired
-	@Qualifier("simplechunk")
 	private Job chunk;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -36,9 +32,7 @@ public class JobRestController {
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
 		try {
-			if ("sequence".equals(jobName)) {
-				launcher.run(sequence, jobParameters);
-			}else if ("chunk".equals(jobName)) {
+			if ("chunk".equals(jobName)) {
 				launcher.run(chunk, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
