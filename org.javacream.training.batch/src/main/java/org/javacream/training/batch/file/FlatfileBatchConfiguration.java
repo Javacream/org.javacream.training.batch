@@ -31,7 +31,7 @@ public class FlatfileBatchConfiguration {
 	@Bean
 	ItemReader<Person> reader() {
 		FlatFileItemReader<Person> itemReader = new FlatFileItemReader<Person>();
-		itemReader.setResource(new FileSystemResource("data/in/people.csv"));
+		itemReader.setResource(new FileSystemResource("src/data/in/people.csv"));
 		DefaultLineMapper<Person> lineMapper = new DefaultLineMapper<Person>();
 		lineMapper.setLineTokenizer(new DelimitedLineTokenizer());
 		lineMapper.setFieldSetMapper((fieldSet) -> {
