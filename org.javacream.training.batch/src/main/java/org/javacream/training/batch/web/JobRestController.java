@@ -24,6 +24,9 @@ public class JobRestController {
 	@Autowired
 	@Qualifier("sequence")
 	private Job sequence;
+	@Autowired
+	@Qualifier("simplechunk")
+	private Job chunk;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
@@ -35,6 +38,8 @@ public class JobRestController {
 		try {
 			if ("sequence".equals(jobName)) {
 				launcher.run(sequence, jobParameters);
+			}else if ("chunk".equals(jobName)) {
+				launcher.run(chunk, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
