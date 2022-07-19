@@ -7,12 +7,18 @@
 	<batch:job id="chunk">
 		<batch:step id="names-processing">
 			<batch:tasklet>
-				<batch:chunk reader="reader" processor="processor" writer="writer" commit-interval="3" ></batch:chunk>
+				<batch:chunk reader="reader" processor="processor"
+					writer="writer" commit-interval="3" skip-limit="2">
+					<batch:skippable-exception-classes>
+						<batch:include
+							class="java.lang.IllegalArgumentException" />
+					</batch:skippable-exception-classes>
+				</batch:chunk>
 				<batch:listeners>
-				<batch:listener ref="stepListener"></batch:listener>
+					<batch:listener ref="stepListener"></batch:listener>
 				</batch:listeners>
 			</batch:tasklet>
-		</batch:step>	
-	
+		</batch:step>
+
 	</batch:job>
 </beans>
