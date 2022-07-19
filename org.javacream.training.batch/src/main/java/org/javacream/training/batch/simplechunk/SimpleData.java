@@ -11,9 +11,23 @@ public class SimpleData {
 	private ExecutionContext executionContext;
 	public void setExecutionContext(ExecutionContext executionContext) {
 		this.executionContext = executionContext;
+		message = executionContext.getString("simpleData", "");
+		processed = executionContext.getInt("processed", 0);
+		
 	}
 
 	private String message;
+	private int processed;
+
+	public int getProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(int processed) {
+		this.processed = processed;
+		executionContext.put("processed", processed);
+		
+	}
 
 	public String getMessage() {
 		return message;

@@ -27,7 +27,7 @@ public class JobRestController {
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
 		System.out.println("received launch request " + jobLaunchRequest);
 		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobLaunchRequest.getJobParameters());
-		jobParametersBuilder.addLong("timestamp", System.currentTimeMillis());
+		//jobParametersBuilder.addLong("timestamp", System.currentTimeMillis());
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = jobLaunchRequest.getJobName();
 		try {
