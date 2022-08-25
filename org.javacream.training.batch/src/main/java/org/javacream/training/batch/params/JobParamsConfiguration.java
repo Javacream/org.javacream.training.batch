@@ -22,13 +22,9 @@ public class JobParamsConfiguration {
     @Autowired
     JobBuilderFactory jobBuilderFactory;
 
+    @Autowired JobParamTasklet jobParamTasklet;
     @Bean public Step jobParamStep1(){
-        return stepBuilderFactory.get("step1").tasklet((contribution, context) -> {
-            Map<String, Object> jobParameter = context.getStepContext().getJobParameters();
-            String param1 = jobParameter.get("param1").toString();
-            System.out.println("param1=" + param1);
-            return RepeatStatus.FINISHED;
-        }).build();
+        return stepBuilderFactory.get("step1").tasklet(jobParamTasklet).build();
     }
     @Bean
     @Qualifier("jobParams")
