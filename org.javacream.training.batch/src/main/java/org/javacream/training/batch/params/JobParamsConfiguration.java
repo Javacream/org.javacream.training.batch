@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 @Configuration
 @EnableBatchProcessing
 public class JobParamsConfiguration {
@@ -21,7 +23,12 @@ public class JobParamsConfiguration {
     JobBuilderFactory jobBuilderFactory;
 
     @Bean public Step jobParamStep1(){
-        return stepBuilderFactory.get("step1").tasklet((contribution, context) -> {System.out.println("param1..."); return RepeatStatus.FINISHED;}).build();
+        return stepBuilderFactory.get("step1").tasklet((contribution, context) -> {
+            Map<String, Object> jobParameter = context.getStepContext().getJobParameters();
+            String param1 = jobParameter.get("param1").toString();
+            System.out.println("param1=" + param1);
+            return RepeatStatus.FINISHED;
+        }).build();
     }
     @Bean
     @Qualifier("jobParams")
