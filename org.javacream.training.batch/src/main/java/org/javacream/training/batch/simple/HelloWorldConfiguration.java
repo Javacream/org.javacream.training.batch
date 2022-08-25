@@ -5,7 +5,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,6 +33,6 @@ public class HelloWorldConfiguration {
     @Bean
     @Qualifier("helloWorld")
     public Job helloWorldJob(){
-        return jobBuilderFactory.get("hello-world-job-with-incrementer").start(step1()).next(step2()).next(step3()).build();
+        return jobBuilderFactory.get("hello-world-job").start(step1()).next(step2()).next(step3()).build();
     }
 }
