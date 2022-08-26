@@ -4,4 +4,19 @@
 	xmlns:batch="http://www.springframework.org/schema/batch"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+	<batch:job id="simpleXmlJob">
+		<batch:step id="xmlStep1">
+			<batch:tasklet ref="step1Tasklet" />
+			<batch:next on="HUGO" to="xmlStep2"/>
+			<batch:next on="EMIL" to="xmlStep3"/>
+		</batch:step>
+		<batch:step id="xmlStep2">
+			<batch:tasklet ref="step2Tasklet" />
+		</batch:step>
+
+		<batch:step id="xmlStep3">
+			<batch:tasklet ref="step3Tasklet" />
+		</batch:step>
+	</batch:job>
 </beans>

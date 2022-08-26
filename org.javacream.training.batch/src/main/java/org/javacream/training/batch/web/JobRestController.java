@@ -31,6 +31,7 @@ public class JobRestController {
 	@Qualifier("jobParams")
 	private Job jobParamsJob;
 
+	@Autowired private Job simpleXmlJob;
 
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody JobLaunchRequest jobLaunchRequest) {
@@ -48,8 +49,10 @@ public class JobRestController {
 				launcher.run(helloWorldJob, jobParameters);
 			}else if ("jobParams".equals(jobName)){
 				launcher.run(jobParamsJob, jobParameters);
+			}else if ("simpleXmlJob".equals(jobName)){
+				launcher.run(simpleXmlJob, jobParameters);
 			}
-			// else -> Dispatching auf andere Jobs
+		// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			System.err.println(e.getMessage());
