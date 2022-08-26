@@ -1,6 +1,5 @@
 package org.javacream.training.batch.simple;
 
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -12,12 +11,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @StepScope
-public class HelloWorldTasklet implements Tasklet {
+public class Step3Tasklet implements Tasklet {
     @Value("#{stepExecution}") private StepExecution stepExecution;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        System.out.println("Hello World");
+        System.out.println("Hello from Step3");
         return RepeatStatus.FINISHED;
     }
 }

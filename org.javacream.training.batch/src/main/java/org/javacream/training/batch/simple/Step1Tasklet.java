@@ -12,12 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @StepScope
-public class HelloWorldTasklet implements Tasklet {
+public class Step1Tasklet implements Tasklet {
     @Value("#{stepExecution}") private StepExecution stepExecution;
+    @Value("#{jobParameters['name']}") private String name;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        System.out.println("Hello World");
+        System.out.println("Hello from Step1");
+        stepExecution.setExitStatus(new ExitStatus(name));
         return RepeatStatus.FINISHED;
     }
 }
