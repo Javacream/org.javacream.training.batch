@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 
 @Component
 @StepScope
@@ -18,6 +20,7 @@ public class JobParamTasklet2 implements Tasklet {
 
     @Value("#{jobParameters['param2']}")
     private String param2;
+
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         System.out.println("param2=" + param2 + ", greetings=" + data.getData());

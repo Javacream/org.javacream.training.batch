@@ -17,6 +17,7 @@ public class HelloWorldConfiguration {
     @Autowired StepBuilderFactory stepBuilderFactory;
     @Autowired
     JobBuilderFactory jobBuilderFactory;
+    @Autowired private HelloWorldTasklet helloWorldTasklet;
     @Bean
     public Step step1(){
         return stepBuilderFactory.get("step1").tasklet((contribution, context) -> {System.out.println("Hello from Step1"); return RepeatStatus.FINISHED;}).build();
@@ -29,10 +30,14 @@ public class HelloWorldConfiguration {
     public Step step3(){
         return stepBuilderFactory.get("step3").tasklet((contribution, context) -> {System.out.println("Hello from Step3"); return RepeatStatus.FINISHED;}).build();
     }
+    @Bean
+    public Step step4(){
+        return stepBuilderFactory.get("step4").tasklet(helloWorldTasklet).build();
+    }
 
     @Bean
     @Qualifier("helloWorld")
     public Job helloWorldJob(){
-        return jobBuilderFactory.get("hello-world-job").start(step1()).next(step2()).next(step3()).build();
+        return jobBuilderFactory.get("hello-world-job").start(step1()).next(step2()).next(step3()).next(step4()).build();
     }
 }
