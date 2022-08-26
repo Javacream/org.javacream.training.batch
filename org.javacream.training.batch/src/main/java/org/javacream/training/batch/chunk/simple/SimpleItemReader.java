@@ -1,5 +1,7 @@
 package org.javacream.training.batch.chunk.simple;
 
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -17,6 +19,13 @@ public class SimpleItemReader implements ItemReader<String> {
 
     private LinkedList<String> names;
 
+    @BeforeStep public void beforeStep(StepExecution stepExecution){
+        int writtenCount = stepExecution.getExecutionContext().getInt("written", 0);
+        System.out.println("READ COUNT=" + writtenCount);
+        for (int i =0; i < writtenCount; i++){
+            names.removeLast();
+        }
+    }
     @PostConstruct public void init(){
         names = new LinkedList<>();
         names.add("Emil");
