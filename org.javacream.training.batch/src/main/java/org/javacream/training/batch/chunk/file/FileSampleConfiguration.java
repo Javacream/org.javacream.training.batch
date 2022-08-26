@@ -14,6 +14,7 @@ import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -22,6 +23,8 @@ import org.springframework.core.io.Resource;
 @Configuration
 @EnableBatchProcessing
 public class FileSampleConfiguration {
+
+    @Value("${file.input.path}") private String path;
 
     @Autowired
     StepBuilderFactory stepBuilderFactory;
@@ -35,7 +38,7 @@ public class FileSampleConfiguration {
     SimpleItemProcessor simpleItemProcessor;
     @Bean @StepScope public FlatFileItemReader<String> fileReader(){
         //return new FlatFileItemReader<String>("src/data/names.txt");
-        Resource input = new FileSystemResource("org.javacream.training.batch/src/data/names.txt");
+        Resource input = new FileSystemResource(path);
         LineMapper<String> mapper = new PassThroughLineMapper();
         return new FlatFileItemReaderBuilder<String>().lineMapper(mapper).resource(input).targetType(String.class).name("flatFileReader").build();
     }

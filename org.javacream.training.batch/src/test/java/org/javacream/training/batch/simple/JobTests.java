@@ -23,14 +23,14 @@ public class JobTests {
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
         JobInstance actualJobInstance = jobExecution.getJobInstance();
         ExitStatus actualJobExitStatus = jobExecution.getExitStatus();
-        Assertions.assertEquals("hello-world-job", actualJobInstance.getJobName());
+        Assertions.assertEquals("chunk-file-job", actualJobInstance.getJobName());
         Assertions.assertEquals("COMPLETED", actualJobExitStatus.getExitCode());
     }
 
-    @Test public void jobHasThreeSteps() throws Exception{
+    @Test public void jobHasOneStep() throws Exception{
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
         Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
-        Assertions.assertEquals(3, stepExecutions.size());
+        Assertions.assertEquals(1, stepExecutions.size());
         stepExecutions.forEach(stepExecution -> {
             Assertions.assertEquals(ExitStatus.COMPLETED, stepExecution.getExitStatus());
         });
