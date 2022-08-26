@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration
-@EnableBatchProcessing
+//@Configuration
+//@EnableBatchProcessing
 @ImportResource("classpath:jobs/simpleJob.xml")
 public class HelloWorldConfiguration {
     @Autowired StepBuilderFactory stepBuilderFactory;

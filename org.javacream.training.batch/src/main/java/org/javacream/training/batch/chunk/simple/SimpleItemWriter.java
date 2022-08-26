@@ -13,25 +13,9 @@ import java.util.List;
 public class SimpleItemWriter implements ItemWriter<Integer> {
     private String shouldThrow;
     private StepExecution stepExecution;
-    @BeforeStep
-    public void beforeStep(StepExecution stepExecution){
-        this.stepExecution = stepExecution;
-        shouldThrow = stepExecution.getExecutionContext().getString("shouldThrow", "y");
-        System.out.println("SHOULD THROW=" + shouldThrow);
-    }
 
     @Override
     public void write(List<? extends Integer> items) throws Exception {
-        int written = stepExecution.getExecutionContext().getInt("written", 0);
-        int commitCount = stepExecution.getCommitCount();
-        System.out.println("commitCount=" + commitCount);
-        //provoke rollback during first execution after first successful commit
-        if (commitCount == 1 && "y".equals(shouldThrow)){
-            stepExecution.getExecutionContext().putString("shouldThrow", "n");
-            throw new IllegalArgumentException("ROLLBACK");
-        }
-        written += items.size();
-        stepExecution.getExecutionContext().putInt("written", written);
         System.out.println(items);
     }
 }
