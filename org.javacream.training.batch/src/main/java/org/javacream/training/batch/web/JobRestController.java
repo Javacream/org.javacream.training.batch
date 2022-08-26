@@ -28,6 +28,10 @@ public class JobRestController {
 	private Job helloWorldJob;
 
 	@Autowired
+	@Qualifier("chunkJob")
+	private Job chunkJob;
+
+	@Autowired
 	@Qualifier("jobParams")
 	private Job jobParamsJob;
 
@@ -51,6 +55,8 @@ public class JobRestController {
 				launcher.run(jobParamsJob, jobParameters);
 			}else if ("simpleXmlJob".equals(jobName)){
 				launcher.run(simpleXmlJob, jobParameters);
+			}else if ("chunkJob".equals(jobName)){
+				launcher.run(chunkJob, jobParameters);
 			}
 		// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
