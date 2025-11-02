@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+	<batch:job id="chunk">
+		<batch:step id="names-processing">
+			<batch:tasklet>
+				<batch:chunk reader="simpleReader" processor="simpleProcessor"
+					writer="simpleWriter" commit-interval="3" skip-limit="2">
+					<batch:skippable-exception-classes>
+						<batch:include
+							class="java.lang.IllegalArgumentException" />
+					</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners>
+					<batch:listener ref="simpleStepListener"></batch:listener>
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+
+	</batch:job>
+</beans>
