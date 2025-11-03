@@ -16,7 +16,8 @@ public class FirstTasklet implements Tasklet {
 	}
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		System.out.println("Hello World");
+		var name = chunkContext.getStepContext().getJobParameters().get("name");
+		System.out.println("Hello World from " + name);
 		return RepeatStatus.FINISHED;
 	}
 }

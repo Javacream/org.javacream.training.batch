@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 public class HelloMoonTasklet implements Tasklet{
 
 	@Value("#{jobParameters['name']}")
-	private String greeting;
+	private String name;
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 		//var params = chunkContext.getStepContext().getJobParameters();
 		//var greeting = params.get("name");
-		System.out.println("Hello " + greeting);
+		System.out.println("Hello Moon from " + name);
 		return RepeatStatus.FINISHED;
 	}
 	
