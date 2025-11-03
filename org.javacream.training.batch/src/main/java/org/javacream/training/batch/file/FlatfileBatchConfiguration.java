@@ -2,7 +2,6 @@ package org.javacream.training.batch.file;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -22,7 +21,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-@EnableBatchProcessing
 public class FlatfileBatchConfiguration {
 	@Autowired
 	private JobRepository jobRepository;
@@ -31,7 +29,7 @@ public class FlatfileBatchConfiguration {
 	@Bean
 	ItemReader<Person> reader() {
 		FlatFileItemReader<Person> itemReader = new FlatFileItemReader<Person>();
-		itemReader.setResource(new FileSystemResource("src/data/in/people.csv"));
+		itemReader.setResource(new FileSystemResource("src/main/resources/data/in/people.csv"));
 		DefaultLineMapper<Person> lineMapper = new DefaultLineMapper<Person>();
 		lineMapper.setLineTokenizer(new DelimitedLineTokenizer());
 		lineMapper.setFieldSetMapper((fieldSet) -> {
