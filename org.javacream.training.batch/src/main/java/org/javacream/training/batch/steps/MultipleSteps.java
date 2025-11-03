@@ -1,6 +1,5 @@
 package org.javacream.training.batch.steps;
 
-import org.javacream.training.batch.second.HelloMoonTasklet;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
