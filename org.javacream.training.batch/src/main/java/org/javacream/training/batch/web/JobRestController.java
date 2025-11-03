@@ -31,6 +31,10 @@ public class JobRestController {
 	@Qualifier("helloMoon")
 	private Job helloMoonJob;
 
+	@Autowired
+	@Qualifier("multiStepJob")
+	private Job multiStepJob;
+
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody HttpJobLaunchRequest httpJobLaunchRequest) {
 		System.out.println("received launch request " + httpJobLaunchRequest);
@@ -48,6 +52,9 @@ public class JobRestController {
 			}
 			else if ("helloMoon".equals(jobName)) {
 				launcher.run(helloMoonJob, jobParameters);
+			}
+			else if ("multiStepJob".equals(jobName)) {
+				launcher.run(multiStepJob, jobParameters);
 			}
 			// else -> Dispatching auf andere Jobs
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException

@@ -18,7 +18,7 @@ public class FirstConfiguration {
 	@Autowired private PlatformTransactionManager transactionManager;
     @Autowired FirstTasklet firstTasklet;
 	@Bean
-    public Step step1(){
+    public Step hello_step(){
     	System.out.println("############## creating step1");
         return new StepBuilder("step1", jobRepository).tasklet(firstTasklet, transactionManager).build();
     }
@@ -27,7 +27,7 @@ public class FirstConfiguration {
     @Qualifier("helloWorld")
     public Job helloWorldJob(){
     	System.out.println("############## creating hello-world-job");
-        return new JobBuilder("hello-world-job", jobRepository).start(step1()).build();
+        return new JobBuilder("hello-world-job", jobRepository).start(hello_step()).build();
     }
 
 }
