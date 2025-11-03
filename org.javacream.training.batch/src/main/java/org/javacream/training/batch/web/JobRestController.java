@@ -24,15 +24,15 @@ public class JobRestController {
 
 	@Autowired
 	private JobLauncher launcher;
-	
+
 	@Autowired
 	private Map<String, Job> jobs;
 
-	@GetMapping (path="api/jobs", produces=MediaType.APPLICATION_JSON_VALUE)
-	public Set<String> jobNames(){
+	@GetMapping(path = "api/jobs", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Set<String> jobNames() {
 		return jobs.keySet();
 	}
-	
+
 	@PostMapping(path = "api/jobs", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String executeJob(@RequestBody HttpJobLaunchRequest httpJobLaunchRequest) {
 		System.out.println("received launch request " + httpJobLaunchRequest);
@@ -40,7 +40,12 @@ public class JobRestController {
 		Properties props = httpJobLaunchRequest.getJobParameters();
 
 		for (String paramName : props.stringPropertyNames()) {
-			jobParametersBuilder.addString(paramName, props.getProperty(paramName), true);
+			if (paramName.startsWith("noId_")) {
+				var jobParamName = paramName.substring(5);
+				jobParametersBuilder.addString(jobParamName, props.getProperty(paramName), false);
+			} else {
+				jobParametersBuilder.addString(paramName, props.getProperty(paramName), true);
+			}
 		}
 		JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 		String jobName = httpJobLaunchRequest.getJobName();
