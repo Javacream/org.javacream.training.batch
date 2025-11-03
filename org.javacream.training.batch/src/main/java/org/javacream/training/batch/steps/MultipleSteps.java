@@ -22,7 +22,7 @@ public class MultipleSteps {
 
 	@Bean public Step step1() {
 		return new StepBuilder("step1", jobRepository).tasklet((contribution, chunkContext) -> {
-			chunkContext.getStepContext().getStepExecution().setExitStatus(new ExitStatus("HUGO"));
+			chunkContext.getStepContext().getStepExecution().setExitStatus(new ExitStatus(chunkContext.getStepContext().getJobParameters().get("name").toString()));
 			System.out.println("step1");
 			return RepeatStatus.FINISHED;
 		}, transactionManager).build();
@@ -44,7 +44,7 @@ public class MultipleSteps {
     @Bean
     @Qualifier("multiStepJob")
     public Job multiStepJob(){
-        return new JobBuilder("multi-step-job", jobRepository).start(step1()).on("HUGO").to(step2()).next(step3()).end().build();
+        return new JobBuilder("multi-step-job", jobRepository).start(step1()).on("HUGO").to(step2()).from(step1()).on("EMIL").to(step3()).end().build();
     }
 
 }
