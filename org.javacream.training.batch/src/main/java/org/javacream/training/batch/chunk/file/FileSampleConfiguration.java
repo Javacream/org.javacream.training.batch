@@ -28,10 +28,10 @@ public class FileSampleConfiguration {
 
     @Autowired private JobRepository jobRepository;
     @Autowired private PlatformTransactionManager transactionManager;
-    @Autowired private SimpleItemWriter simpleItemWriter;
 
-    @Autowired
-    SimpleItemProcessor simpleItemProcessor;
+    @Autowired private SimpleItemWriter simpleItemWriter;
+    @Autowired private SimpleItemProcessor simpleItemProcessor;
+    
     @Bean @StepScope public FlatFileItemReader<String> fileReader(){
         //return new FlatFileItemReader<String>("src/data/names.txt");
         Resource input = new FileSystemResource(path);
