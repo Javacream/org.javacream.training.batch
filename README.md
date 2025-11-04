@@ -1,6 +1,6 @@
 # org.javacream.training.batch
 
-* Referent: Rainer Sawitzki, eMail: training@rainer-sawitzki.de
+* Referent: Rainer Sawitzki, eMail: rainer.sawitzki@gmail.com
     
 * Seminarzeiten
   * 8 Unterrichtseinheiten mit jeweils etwa 90 Minuten
