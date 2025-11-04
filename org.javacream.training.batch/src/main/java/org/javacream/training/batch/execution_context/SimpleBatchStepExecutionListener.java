@@ -11,6 +11,7 @@ public class SimpleBatchStepExecutionListener implements StepExecutionListener {
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		System.out.println("step: " + stepExecution);
+		stepExecution.getExecutionContext().putString("this", "that");
 	}
 
 	@Override

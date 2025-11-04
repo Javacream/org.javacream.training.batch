@@ -1,0 +1,52 @@
+package org.javacream.training.batch.chunk.file;
+
+import org.javacream.training.batch.chunk.simple.SimpleItemProcessor;
+import org.javacream.training.batch.chunk.simple.SimpleItemWriter;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.transaction.PlatformTransactionManager;
+
+@Configuration
+public class FileSampleConfiguration {
+
+    @Value("${file.input.path}") private String path;
+
+    @Autowired private JobRepository jobRepository;
+    @Autowired private PlatformTransactionManager transactionManager;
+    @Autowired private SimpleItemWriter simpleItemWriter;
+
+    @Autowired
+    SimpleItemProcessor simpleItemProcessor;
+    @Bean @StepScope public FlatFileItemReader<String> fileReader(){
+        //return new FlatFileItemReader<String>("src/data/names.txt");
+        Resource input = new FileSystemResource(path);
+        LineMapper<String> mapper = new PassThroughLineMapper();
+        return new FlatFileItemReaderBuilder<String>().lineMapper(mapper).resource(input).targetType(String.class).name("flatFileReader").build();
+    }
+
+    @Bean public Step fileChunkStep(){
+        return new StepBuilder("fileChunk", jobRepository).<String, Integer>chunk(3, transactionManager).reader(fileReader()).processor(simpleItemProcessor).writer(simpleItemWriter).build();
+    }
+
+    @Bean
+    @Qualifier("chunkFileJob")
+    public Job chunkFileJob(){
+        return new JobBuilder("chunk-file-job", jobRepository).start(fileChunkStep()).build();
+    }
+
+}
