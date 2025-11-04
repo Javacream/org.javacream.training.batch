@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+    <bean id="xmlItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="resource" value="file:src/data/names.txt"/>
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper"/>
+        </property>
+    </bean>
+
+    <batch:job id="chunkFileXmlJob">
+        <batch:step id="readFile">
+            <batch:tasklet>
+                <batch:chunk reader="xmlItemReader" processor="simpleItemProcessor" writer="simpleItemWriter" commit-interval="3"/>
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
+</beans>

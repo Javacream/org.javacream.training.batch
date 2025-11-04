@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@ImportResource("jobs/multiStepJob.xml")
+@ImportResource({"jobs/multiStepJob.xml", "jobs/chunkFileXmlJob.xml"})
 public class Application {
 
 	public static void main(String[] args) {
