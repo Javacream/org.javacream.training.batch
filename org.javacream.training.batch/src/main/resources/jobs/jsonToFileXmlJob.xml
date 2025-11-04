@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+    <!-- Jackson mapper (für JSON -> String) -->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <!-- Processor: delegiert an ObjectMapper.writeValueAsString(Object) => String -->
+    <bean id="toJsonProcessor" class="org.springframework.batch.item.adapter.ItemProcessorAdapter">
+        <property name="targetObject" ref="objectMapper"/>
+        <property name="targetMethod" value="writeValueAsString"/>
+    </bean>
+
+    <!-- JSON Reader: liest eine JSON-Quelle (Array oder stream von Objekten) als Map -->
+    <bean id="peopleJsonReader" class="org.springframework.batch.item.json.JsonItemReader">
+        <!-- URL-Resource (extern) -->
+        <property name="resource" value="http://javacream.eu:8080/people"/>
+        <property name="jsonObjectReader">
+            <!-- Zieltyp: Map => keine Domänenklasse nötig -->
+            <bean class="org.springframework.batch.item.json.JacksonJsonObjectReader">
+                <constructor-arg value="java.util.LinkedHashMap"/>
+            </bean>
+        </property>
+        <property name="name" value="peopleJsonReader"/>
+    </bean>
+
+    <bean id="peopleWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="name" value="peopleWriter"/>
+        <property name="resource" value="file:src/data/people.txt"/>
+        <property name="appendAllowed" value="false"/>
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+        </property>
+    </bean>
+
+    <batch:step id="exportPeopleStep">
+        <batch:tasklet>
+            <batch:chunk reader="peopleJsonReader"
+                         processor="toJsonProcessor"
+                         writer="peopleWriter"
+                         commit-interval="2"/>
+        </batch:tasklet>
+    </batch:step>
+
+    <batch:job id="exportPeopleJob">
+        <batch:step id="exportPeopleStepRef" parent="exportPeopleStep"/>
+    </batch:job>
+
+</beans>
